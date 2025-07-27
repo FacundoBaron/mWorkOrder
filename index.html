@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Formulario Dinámico</title>
+</head>
+<body>
+  <h2>Formulario de Selección</h2>
+
+  <!-- Selección de Área -->
+  <label for="area">Área:</label>
+  <select id="area" onchange="actualizarCentrosYGrupos()">
+    <option value="">--Selecciona un Área--</option>
+    <option value="A">A - Bomba y Martillo/Eléctricos de Superficie y Mina</option>
+    <option value="B">B - Mantenimiento Eléctrico Planta</option>
+    <option value="C">C - Mecánicos de Terreno y Truckshop</option>
+    <option value="D">D - Livianos</option>
+    <option value="E">E - Soldadores</option>
+  </select>
+
+  <!-- Selección de Centro de Trabajo -->
+  <div id="centros-container" style="margin-top: 10px;">
+    <label>Centros de Trabajo:</label>
+    <div id="centros"></div>
+  </div>
+
+  <!-- Selección de Grupo Planificador -->
+  <div id="grupos-container" style="margin-top: 10px;">
+    <label>Grupo Planificador:</label>
+    <div id="grupos"></div>
+  </div>
+
+  <script>
+    const datos = {
+      A: {
+        centros: ["CNMEUELE", "CNMINEMB", "CNMMCELE", "CNMSUPEL", "CNGENELE", "CNGENSUP"],
+        grupos: ["CEL", "CET", "CGE", "CSP", "CVN", "CSP", "CAX", "CPR"]
+      },
+      B: {
+        centros: ["CNGENELE", "CNPLACON", "CNPLAELE", "CNPLAINS", "CNPLALUB", "CNPLAM&C", "CNPLAMEC", "CNPLASME"],
+        grupos: ["COP"]
+      },
+      C: {
+        centros: ["CNMINCTF", "CNMINCTS", "CNMINGOM", "CNMINMEC", "CNMINSMM", "CNMINSIM", "CNEURMEC", "CNMARMEC"],
+        grupos: ["CAB", "CAS", "CAX", "CCB", "CCS", "CPR", "CFV"]
+      },
+      D: {
+        centros: ["CNMINGOM", "CNMINMEC", "CNMINSIM", "CNMINCTF", "CNMARMEC", "CNEURMEC", "CNGENSML"],
+        grupos: ["CAB", "CAS", "CAX", "CCB", "CCS", "CPR", "CFV", "CPR"]
+      },
+      E: {
+        centros: ["CNEURMEC", "CNGENTML", "CNMARMEC", "CNMINCTF", "CNMINCTS", "CNMINDEK", "CNMINEMB", "CNMINMEC", "CNMINSIM", "CNMINSOL"],
+        grupos: ["CAB", "CAS", "CAX", "CCB", "CCS", "CET", "CFV", "CPR", "CSP"]
+      }
+    };
+
+    function actualizarCentrosYGrupos() {
+      const areaSeleccionada = document.getElementById("area").value;
+      const centrosDiv = document.getElementById("centros");
+      const gruposDiv = document.getElementById("grupos");
+
+      centrosDiv.innerHTML = "";
+      gruposDiv.innerHTML = "";
+
+      if (!areaSeleccionada || !datos[areaSeleccionada]) return;
+
+      // Centros
+      datos[areaSeleccionada].centros.forEach(centro => {
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.name = "centros";
+        checkbox.value = centro;
+
+        const label = document.createElement("label");
+        label.textContent = centro;
+        label.style.marginRight = "10px";
+
+        centrosDiv.appendChild(checkbox);
+        centrosDiv.appendChild(label);
+        centrosDiv.appendChild(document.createElement("br"));
+      });
+
+      // Grupos
+      const grupoSet = new Set(datos[areaSeleccionada].grupos); // evitar repetidos
+      grupoSet.forEach(grupo => {
+        const radio = document.createElement("input");
+        radio.type = "radio";
+        radio.name = "grupo";
+        radio.value = grupo;
+
+        const label = document.createElement("label");
+        label.textContent = grupo;
+        label.style.marginRight = "10px";
+
+        gruposDiv.appendChild(radio);
+        gruposDiv.appendChild(label);
+        gruposDiv.appendChild(document.createElement("br"));
+      });
+    }
+  </script>
+</body>
+</html>
