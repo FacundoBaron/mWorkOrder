@@ -1,0 +1,155 @@
+<head><style>
+    body {
+        font-family: Arial, sans-serif;
+        font-size: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+    form {
+        text-align: center;
+    }
+</style><script>
+document.addEventListener("DOMContentLoaded", function() {
+    const areaSelect = document.getElementById("area");
+    const enviarBtn = document.getElementById("enviarFormulario");
+
+    function checkAreaSelection() {
+        const selectedValue = areaSelect.value;
+        const validAreas = ["A", "B", "C", "D", "E"];
+        if (validAreas.includes(selectedValue.charAt(0))) {
+            enviarBtn.style.display = "block";
+        } else {
+            enviarBtn.style.display = "none";
+        }
+    }
+
+    if (areaSelect && enviarBtn) {
+        areaSelect.addEventListener("change", checkAreaSelection);
+        checkAreaSelection();
+    }
+});
+</script></head><html><body>
+<div id="intro_form">
+<form action="https://formsubmit.co/fbaron@innovarit.com" id="user_info_form" method="POST">
+<label for="nombre_usuario">Nombre del Usuario:</label><br/>
+<input id="nombre_usuario" name="nombre_usuario" required="" type="text"/><br/><br/>
+<label for="gid_usuario">GID del Usuario:</label><br/>
+<input id="gid_usuario" name="gid_usuario" required="" type="text"/><br/><br/>
+<button disabled="" id="completar_btn" type="button">Completar</button>
+</form>
+</div>
+<script>
+  const nombreInput = document.getElementById('nombre_usuario');
+  const gidInput = document.getElementById('gid_usuario');
+  const completarBtn = document.getElementById('completar_btn');
+
+  function checkInputs() {
+    if (nombreInput.value.trim() !== '' && gidInput.value.trim() !== '') {
+      completarBtn.disabled = false;
+    } else {
+      completarBtn.disabled = true;
+    }
+  }
+
+  nombreInput.addEventListener('input', checkInputs);
+  gidInput.addEventListener('input', checkInputs);
+
+  completarBtn.addEventListener('click', function() {
+    document.getElementById('intro_form').style.display = 'none';
+    document.getElementById('formulario_original').style.display = 'block';
+  });
+</script>
+<div id="formulario_original" style="display:none;"><body>
+<h2>Formulario de Selección</h2>
+<!-- Selección de Área -->
+<label for="area">Área:</label>
+<select id="area" name="area" onchange="actualizarCentrosYGrupos()">
+<option value="">--Selecciona un Área--</option>
+<option value="A">A - Bomba y Martillo/Eléctricos de Superficie y Mina</option>
+<option value="B">B - Mantenimiento Eléctrico Planta</option>
+<option value="C">C - Mecánicos de Terreno y Truckshop</option>
+<option value="D">D - Livianos</option>
+<option value="E">E - Soldadores</option>
+</select>
+<!-- Selección de Centro de Trabajo -->
+<div id="centros-container" style="margin-top: 10px;">
+<label>Centros de Trabajo:</label>
+<div id="centros"></div>
+</div>
+<!-- Selección de Grupo Planificador -->
+<div id="grupos-container" style="margin-top: 10px;">
+<label>Grupo Planificador:</label>
+<div id="grupos"></div>
+</div>
+<script>
+    const datos = {
+      A: {
+        centros: ["CNMEUELE", "CNMINEMB", "CNMMCELE", "CNMSUPEL", "CNGENELE", "CNGENSUP"],
+        grupos: ["CEL", "CET", "CGE", "CSP", "CVN", "CSP", "CAX", "CPR"]
+      },
+      B: {
+        centros: ["CNGENELE", "CNPLACON", "CNPLAELE", "CNPLAINS", "CNPLALUB", "CNPLAM&C", "CNPLAMEC", "CNPLASME"],
+        grupos: ["COP"]
+      },
+      C: {
+        centros: ["CNMINCTF", "CNMINCTS", "CNMINGOM", "CNMINMEC", "CNMINSMM", "CNMINSIM", "CNEURMEC", "CNMARMEC"],
+        grupos: ["CAB", "CAS", "CAX", "CCB", "CCS", "CPR", "CFV"]
+      },
+      D: {
+        centros: ["CNMINGOM", "CNMINMEC", "CNMINSIM", "CNMINCTF", "CNMARMEC", "CNEURMEC", "CNGENSML"],
+        grupos: ["CAB", "CAS", "CAX", "CCB", "CCS", "CPR", "CFV", "CPR"]
+      },
+      E: {
+        centros: ["CNEURMEC", "CNGENTML", "CNMARMEC", "CNMINCTF", "CNMINCTS", "CNMINDEK", "CNMINEMB", "CNMINMEC", "CNMINSIM", "CNMINSOL"],
+        grupos: ["CAB", "CAS", "CAX", "CCB", "CCS", "CET", "CFV", "CPR", "CSP"]
+      }
+    };
+
+    function actualizarCentrosYGrupos() {
+      const areaSeleccionada = document.getElementById("area").value;
+      const centrosDiv = document.getElementById("centros");
+      const gruposDiv = document.getElementById("grupos");
+
+      centrosDiv.innerHTML = "";
+      gruposDiv.innerHTML = "";
+
+      if (!areaSeleccionada || !datos[areaSeleccionada]) return;
+
+      // Centros
+      datos[areaSeleccionada].centros.forEach(centro => {
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.name = "centros";
+        checkbox.value = centro;
+
+        const label = document.createElement("label");
+        label.textContent = centro;
+        label.style.marginRight = "10px";
+
+        centrosDiv.appendChild(checkbox);
+        centrosDiv.appendChild(label);
+        centrosDiv.appendChild(document.createElement("br"));
+      });
+
+      // Grupos
+      const grupoSet = new Set(datos[areaSeleccionada].grupos); // evitar repetidos
+      grupoSet.forEach(grupo => {
+        const radio = document.createElement("input");
+        radio.type = "radio";
+        radio.name = "grupo";
+        radio.value = grupo;
+
+        const label = document.createElement("label");
+        label.textContent = grupo;
+        label.style.marginRight = "10px";
+
+        gruposDiv.appendChild(radio);
+        gruposDiv.appendChild(label);
+        gruposDiv.appendChild(document.createElement("br"));
+      });
+    }
+  </script>
+</body></div><button id="enviarFormulario" onclick="window.location.href='mailto:fbaron@innovarit.com?subject=Resumen del Formulario';" style="display:none;">Enviar Formulario</button></body></html>
